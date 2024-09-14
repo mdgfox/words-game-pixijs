@@ -1,22 +1,33 @@
-import { Application, Assets, Texture } from "pixi.js";
+import { Application, ApplicationOptions, Assets } from "pixi.js";
 import { manifest } from "../configuration/assetsManifest";
 import { Title } from "./Title";
 import { Field } from "./Field";
 import axios from "axios";
+import { GameAssets } from "../configuration/types";
+import { LettersController } from "./LettersController";
 
 export class Game extends Application {
     public static WIDTH = 640;
     public static HEIGHT = 1136;
 
-    protected assets: { letterCell?: Texture, buttonGreen?: Texture, letterField?: Texture } = {};
+    protected assets!: GameAssets;
+    private levels: Array<{ words: string[] }> = [];
 
     private titleComponent!: Title;
     private field!: Field;
-    private levels: Array<{ words: string[] }> = [];
+    private inputController!: LettersController;
 
-    public constructor() {
+    private currentLevel: number;
+
+    public constructor(initialLevel: number) {
         super();
-        // this.stage.scale.set(2);
+        this.currentLevel = initialLevel;
+        this.stage.eventMode = "static";
+    }
+
+    async init(options?: Partial<ApplicationOptions>): Promise<void> {
+        await super.init(options);
+        await this.loadAssets();
     }
 
     async loadAssets() {
@@ -29,24 +40,22 @@ export class Game extends Application {
         await Assets.loadBundle("fonts");
 
         for (let i = 1; i < 4; i++) {
-            const levelConfig = await this.fetchLevelById(i);
-            this.levels.push(levelConfig);
+            const { data } = await axios.get<{ words: string[] }>(`public/levels/${i}.json`);
+            this.levels.push(data);
         }
     }
 
-    async fetchLevelById(id: number) {
-        const { data } = await axios.get<{ words: string[] }>(`public/levels/${id}.json`);
-        return data;
-    }
-
-    async startGame() {
+    async startGame() { // todo here need to get level num, to restart game with different levels
         this.titleComponent = this.stage.addChild(new Title());
-        this.titleComponent.position.set(1000 / 2, 40);
+        this.titleComponent.position.set(this.screen.width / 2, 40);
 
-        this.field = this.stage.addChild(new Field(this.levels, this.assets.letterCell!));
-        this.field.position.set(720, 500);
+        this.field = this.stage.addChild(new Field(this.levels, this.assets));
+        this.field.position.set(this.screen.width / 2 + this.field.width / 2, 200);
+        this.field.pivot.set(this.field.width / 2, 0);
 
-        // todo here word letters select component
+        this.inputController = this.stage.addChild(new LettersController(this.assets));
+        this.inputController.position.set(this.screen.width / 2, 750);
+        this.inputController.pivot.set(this.inputController.width / 2, 0);
     }
 
 }
