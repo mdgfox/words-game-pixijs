@@ -1,4 +1,6 @@
-import { Container, Sprite, Text, TextStyle, Texture } from "pixi.js";
+import { Container } from "pixi.js";
+import { GameAssets } from "../configuration/types";
+import { FieldCell } from "./FieldCell";
 
 export class Field extends Container {
     private _allLevels: string[][];
@@ -10,37 +12,45 @@ export class Field extends Container {
         this._levelConfig = value;
     }
 
-    constructor(levels: Array<{ words: string[] }>, cellTexture: Texture, currentLevel: number = 1) {
+    private lines: Array<Container>;
+    private ind: number = 0;
+
+    constructor(levels: Array<{ words: string[] }>, assets: GameAssets, currentLevel: number = 1) {
         super();
         this._allLevels = levels.map(level => level.words);
         this._levelConfig = this._allLevels[currentLevel - 1];
 
-        const lines = this.levelConfig.map((word, index) => {
+        this.lines = this.levelConfig.map((word, index) => {
             const line = new Container();
-            line.position.set(0, index * (cellTexture.height + 20));
+
             const letters = word.split("").map((letter, letterIndex) => {
-                const letterBackground = new Sprite(cellTexture);
-                letterBackground.position.set(letterIndex * 100, 0);
-                letterBackground.anchor.set(0.5);
-                const letterText = letterBackground.addChild(new Text({ text: letter, style: letterTextStyle }));
-                letterText.anchor.set(0.5);
-                return letterBackground;
+                const cell = new FieldCell(letter, assets);
+                cell.position.set(letterIndex * 100, 0);
+                return cell;
             });
 
             line.addChild(...letters);
-            line.pivot.set(line.width / 2, line.height / 2);
+
+            line.position.set(0, index * (assets.letterCell.height + 20));
+
+            line.pivot.set(line.width / 2 - letters[0].width / 2, 0);
+
             return line;
         });
 
-        this.addChild(...lines);
-        this.pivot.set(this.width / 2, this.height / 2);
+        this.addChild(...this.lines);
+
+        this.on("pointerdown", this.handleClick, this);
+        this.eventMode = "static";
+    }
+
+    openLine(index: number) {
+        const cells = this.lines[index].children as FieldCell[];
+        cells.forEach((fieldCell: FieldCell) => fieldCell.openLetter());
+    }
+
+    handleClick() {
+        this.openLine(this.ind);
+        this.ind += 1;
     }
 }
-
-const letterTextStyle = new TextStyle({
-    fontFamily: 'Vag World Bold',
-    fontWeight: "700",
-    fontSize: 64,
-    lineHeight: 35,
-    align: "center",
-});
