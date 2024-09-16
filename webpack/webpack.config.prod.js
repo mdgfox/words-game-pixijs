@@ -10,7 +10,6 @@ module.exports = {
         contentBase: 'dist',
         port: 3000
     },
-    devtool: 'inline-source-map',
     entry: {
         index: {
             import: './src/index.ts',
