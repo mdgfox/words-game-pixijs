@@ -10,7 +10,7 @@ export class Field extends Container {
         return this.openedLinesCounter;
     }
 
-    constructor(assets: GameAssets, words: string[]) {
+    constructor(assets: GameAssets, words: string[], progress: number[]) {
         super({ eventMode: "static" });
         this.currentLevel = words;
 
@@ -22,6 +22,11 @@ export class Field extends Container {
                 cell.position.set(letterIndex * 100, 0);
                 return cell;
             });
+
+            if (progress.includes(index)) {
+                this.openedLinesCounter++;
+                letters.forEach((fieldCell: FieldCell) => fieldCell.openLetter());
+            }
 
             line.addChild(...letters);
 

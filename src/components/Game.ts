@@ -11,7 +11,7 @@ import { ReloadPopup } from "./popups/ReloadPopup";
 
 export class Game extends Application {
     public static WIDTH = 640;
-    public static HEIGHT = 1136;
+    public static HEIGHT = 1280;
 
     private uuid: string;
     protected assets!: GameAssets;
@@ -23,19 +23,38 @@ export class Game extends Application {
     private winPopup?: WinPopup;
     private reloadPopup?: ReloadPopup;
 
-    private _currentLevel: number = 0;
+    private _currentLevel: number;
     set currentLevel(value: number) {
         this._currentLevel = value;
         localStorage.setItem("currentLevel", value.toString());
+    }
+
+    private _currentLevelProgress: number[];
+    set currentLevelProgress(value: number[]) {
+        this._currentLevelProgress = value;
+        localStorage.setItem(`level[${this._currentLevel}].progress`, this._currentLevelProgress.toString());
+    }
+    addCurrentLevelProgress(value: number) {
+        this._currentLevelProgress.push(value);
+        localStorage.setItem(`level[${this._currentLevel}].progress`, this._currentLevelProgress.toString());
     }
 
     public constructor(initialLevel: number = 1) {
         super({ eventMode: "static" });
         const currentStorageLevel = localStorage.getItem("currentLevel");
         if (!currentStorageLevel) {
-            this.currentLevel = initialLevel;
+            this._currentLevel = initialLevel;
+            localStorage.setItem("currentLevel", this._currentLevel.toString());
         } else {
-            this.currentLevel = Number.parseInt(currentStorageLevel);
+            this._currentLevel = Number.parseInt(currentStorageLevel);
+        }
+
+        const currentStorageLevelProgress = localStorage.getItem(`level[${this._currentLevel}].progress`);
+        if (!currentStorageLevelProgress) {
+            this._currentLevelProgress = [];
+            localStorage.setItem(`level[${this._currentLevel}].progress`, this._currentLevelProgress.toString());
+        } else {
+            this._currentLevelProgress = currentStorageLevelProgress.split(',').map(i => Number.parseInt(i));
         }
 
         this.uuid = uuidv4();
@@ -85,7 +104,7 @@ export class Game extends Application {
     async startGame() {
         this.titleComponent = this.stage.addChild(new Title(this._currentLevel));
 
-        this.field = this.stage.addChild(new Field(this.assets, this.getCurrentLevelConfig()));
+        this.field = this.stage.addChild(new Field(this.assets, this.getCurrentLevelConfig(), this._currentLevelProgress));
 
         this.inputController = this.stage.addChild(new LettersController(this.assets, this.getCurrentLevelLetters()));
 
@@ -131,7 +150,7 @@ export class Game extends Application {
     getCurrentLevelLetters() {
         const levelConfig = this.getCurrentLevelConfig();
         const allWords = levelConfig.join("");
-        const uniqueChars = [... new Set(allWords)];
+        const uniqueChars = [...new Set(allWords)];
         return uniqueChars;
     }
 
@@ -139,6 +158,7 @@ export class Game extends Application {
         const currentLevel = this.getCurrentLevelConfig();
         const index = currentLevel.findIndex(levelWord => levelWord == word);
         if (index !== -1) {
+            this.addCurrentLevelProgress(index);
             this.field?.openLine(index);
         }
         if (this.field?.openedLines === currentLevel.length) {
@@ -160,6 +180,7 @@ export class Game extends Application {
 
     handleCloseWinPopup() {
         this.currentLevel = this._currentLevel + 1;
+        this.currentLevelProgress = [];
         this.startGame();
     }
 }
