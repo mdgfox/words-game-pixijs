@@ -15,7 +15,7 @@ export const manifest: AssetsManifest = {
                 },
                 {
                     alias: "buttonGreen",
-                    src: "public/assets/letter-cell.png",
+                    src: "public/assets/button-green.png",
                 },
                 {
                     alias: "letterPick",
@@ -25,6 +25,18 @@ export const manifest: AssetsManifest = {
                     alias: "letterPickPink",
                     src: "public/assets/letter-pick-pink.png",
                 },
+                {
+                    alias: "letterPickBackground",
+                    src: "public/assets/letter-pick-background.png",
+                },
+                {
+                    alias: "reloadPopupBackground",
+                    src: "public/assets/reload-popup-background.png",
+                },
+                {
+                    alias: "reloadPopupRibbon",
+                    src: "public/assets/reload-popup-ribbon.png",
+                }
             ]
         },
     ]

@@ -6,4 +6,7 @@ export interface GameAssets {
     buttonGreen: Texture;
     letterPick: Texture;
     letterPickPink: Texture;
+    letterPickBackground: Texture;
+    reloadPopupBackground: Texture;
+    reloadPopupRibbon: Texture;
 }
