@@ -1,5 +1,5 @@
 import { Container, Sprite, Text, TextStyle } from "pixi.js";
-import { GameAssets } from "../configuration/types";
+import { GameAssets } from "../../configuration/types";
 
 export class FieldCell extends Container {
     private letter: string;
@@ -14,7 +14,7 @@ export class FieldCell extends Container {
 
         this.background = this.addChild(new Sprite(assets.letterCell));
         this.background.anchor.set(0.5);
-        this.letterTextComponent = new Text({ text: letter, style: letterTextStyle(fontType === "white" ? "#FFFFFF" : "#4D4D4D") });
+        this.letterTextComponent = new Text({ text: letter.toLocaleUpperCase(), style: letterTextStyle(fontType === "white" ? "#FFFFFF" : "#4D4D4D") });
         this.letterTextComponent.anchor.set(0.5);
         this.letterTextComponent.visible = fontType === "white" ? false : true;
 

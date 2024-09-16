@@ -1,26 +1,20 @@
 import { Container } from "pixi.js";
-import { GameAssets } from "../configuration/types";
-import { FieldCell } from "./FieldCell";
+import { GameAssets } from "../../configuration/types";
+import { FieldCell } from "../common/FieldCell";
 
 export class Field extends Container {
-    private _allLevels: string[][];
-    private _levelConfig: string[];
-    get levelConfig() {
-        return this._levelConfig;
-    }
-    set levelConfig(value: string[]) {
-        this._levelConfig = value;
-    }
-
+    private currentLevel: string[];
     private lines: Array<Container>;
-    private ind: number = 0;
+    private openedLinesCounter: number = 0;
+    get openedLines() {
+        return this.openedLinesCounter;
+    }
 
-    constructor(levels: Array<{ words: string[] }>, assets: GameAssets, currentLevel: number = 1) {
-        super();
-        this._allLevels = levels.map(level => level.words);
-        this._levelConfig = this._allLevels[currentLevel - 1];
+    constructor(assets: GameAssets, words: string[]) {
+        super({ eventMode: "static" });
+        this.currentLevel = words;
 
-        this.lines = this.levelConfig.map((word, index) => {
+        this.lines = this.currentLevel.map((word, index) => {
             const line = new Container();
 
             const letters = word.split("").map((letter, letterIndex) => {
@@ -39,18 +33,11 @@ export class Field extends Container {
         });
 
         this.addChild(...this.lines);
-
-        this.on("pointerdown", this.handleClick, this);
-        this.eventMode = "static";
     }
 
     openLine(index: number) {
+        this.openedLinesCounter++;
         const cells = this.lines[index].children as FieldCell[];
         cells.forEach((fieldCell: FieldCell) => fieldCell.openLetter());
-    }
-
-    handleClick() {
-        this.openLine(this.ind);
-        this.ind += 1;
     }
 }

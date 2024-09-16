@@ -2,7 +2,7 @@ import { Game } from './components/Game';
 
 
 window.onload = async (): Promise<void> => {
-    const game = new Game(1);
+    const game = new Game();
     await game.init({
         backgroundColor: "#2B344B",
         backgroundAlpha: 1.0,

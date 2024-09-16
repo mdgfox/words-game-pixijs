@@ -32,5 +32,6 @@
     "no-self-compare": 2,
     "no-unused-private-class-members": 2,
     "no-useless-return": 2,
+    "no-unused-vars": ["warning", { "argsIgnorePattern": "^_" }]
   }
 }

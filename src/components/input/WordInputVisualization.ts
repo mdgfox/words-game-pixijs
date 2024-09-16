@@ -1,6 +1,6 @@
 import { Container, DestroyOptions } from "pixi.js";
-import { GameAssets } from "../configuration/types";
-import { FieldCell } from "./FieldCell";
+import { GameAssets } from "../../configuration/types";
+import { FieldCell } from "../common/FieldCell";
 
 export class WordInputVisualization extends Container {
     private assets: GameAssets;
@@ -23,7 +23,6 @@ export class WordInputVisualization extends Container {
         this.assets = assets;
         this.root = this.addChild(new Container());
 
-        document.addEventListener('keydown', this.handleKeydown.bind(this));
         this.addListener("word:updated", this.updateLayout, this);
     }
 
@@ -44,16 +43,14 @@ export class WordInputVisualization extends Container {
         this.root.pivot.set(newPivotX, 0);
     }
 
-    handleKeydown(event: KeyboardEvent) {
-        if (event.key === "Escape") {
-            this.word = "";
+    removeLastLetter() {
+        if (this.word.length > 0) {
+            this.word = this.word.substring(0, this.word.length - 1);
         }
-        this.word += event.key;
     }
 
     destroy(options?: DestroyOptions): void {
         super.destroy(options);
         this.removeListener("word:updated", this.updateLayout);
     }
-
 }
