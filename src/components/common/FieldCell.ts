@@ -1,5 +1,6 @@
-import { Container, Sprite, Text, TextStyle } from "pixi.js";
-import { GameAssets } from "../../configuration/types";
+import { Container, Sprite, Text } from "pixi.js";
+import { GameAssets, whiteColor, GameFontColor } from "../../configuration/types";
+import { defaultTextStyle } from "./TextStyles";
 
 export class FieldCell extends Container {
     private letter: string;
@@ -7,16 +8,16 @@ export class FieldCell extends Container {
     private letterTextComponent: Text;
     private background: Sprite;
 
-    constructor(letter: string, assets: GameAssets, scale: number = 1, fontType: "white" | "black" = "white") {
+    constructor(letter: string, assets: GameAssets, scale: number = 1, fontColor: GameFontColor = "#FFFFFF") {
         super();
         this.letter = letter;
         this.assets = assets;
 
         this.background = this.addChild(new Sprite(assets.letterCell));
         this.background.anchor.set(0.5);
-        this.letterTextComponent = new Text({ text: letter.toLocaleUpperCase(), style: letterTextStyle(fontType === "white" ? "#FFFFFF" : "#4D4D4D") });
+        this.letterTextComponent = new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, fontColor) });
         this.letterTextComponent.anchor.set(0.5);
-        this.letterTextComponent.visible = fontType === "white" ? false : true;
+        this.letterTextComponent.visible = fontColor === whiteColor ? false : true;
 
         this.background.addChild(this.letterTextComponent);
 
@@ -28,12 +29,3 @@ export class FieldCell extends Container {
         this.letterTextComponent.visible = true;
     }
 }
-
-const letterTextStyle = (fill: string) => new TextStyle({
-    fontFamily: 'Vag World Bold',
-    fontWeight: "700",
-    fill,
-    fontSize: 64,
-    lineHeight: 35,
-    align: "center",
-});

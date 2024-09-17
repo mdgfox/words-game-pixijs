@@ -1,5 +1,6 @@
-import { Container, Sprite, Text, TextStyle, isMobile } from "pixi.js";
-import { GameAssets } from "../../configuration/types";
+import { Container, DestroyOptions, Sprite, Text, isMobile } from "pixi.js";
+import { grayColor, GameAssets, whiteColor } from "../../configuration/types";
+import { defaultTextStyle } from "../common/TextStyles";
 
 export class LetterComponent extends Container {
     private _letter: string;
@@ -32,7 +33,7 @@ export class LetterComponent extends Container {
         this.background = this.root.addChild(new Sprite({ texture: assets.letterPick, anchor: 0.5 }));
         this.background.eventMode = "static";
 
-        this.textField = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: letterTextStyle("#4D4D4D") }));
+        this.textField = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, grayColor) }));
         this.textField.anchor.set(0.5);
 
         this.on("pointerover", () => this.emit("onPointerOver", this), this);
@@ -46,21 +47,16 @@ export class LetterComponent extends Container {
 
     private setSelected() {
         this.background.texture = this.assets.letterPickPink;
-        this.textField.style = letterTextStyle("#FFFFFF");
+        this.textField.style = defaultTextStyle(64, whiteColor);
     }
 
     private setDeselected() {
         this.background.texture = this.assets.letterPick;
-        this.textField.style = letterTextStyle("#4D4D4D");
+        this.textField.style = defaultTextStyle(64, grayColor);
+    }
 
+    destroy(options?: DestroyOptions): void {
+        super.destroy(options);
+        this.removeAllListeners();
     }
 }
-
-const letterTextStyle = (fill: string) => new TextStyle({
-    fontFamily: "Vag World Bold",
-    fontWeight: "700",
-    fill,
-    fontSize: 64,
-    lineHeight: 35,
-    align: "center",
-});

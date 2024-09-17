@@ -1,5 +1,6 @@
-import { Container, DestroyOptions, Graphics, Sprite, Text, TextStyle } from "pixi.js";
+import { Container, DestroyOptions, Sprite, Text } from "pixi.js";
 import { GameAssets } from "../../configuration/types";
+import { defaultTextStyle } from "../common/TextStyles";
 
 export class WinPopup extends Container {
     private root: Container;
@@ -12,16 +13,16 @@ export class WinPopup extends Container {
 
         this.root = this.addChild(new Container({ eventMode: "static" }));
 
-        this.message = this.root.addChild(new Text({ text: `Уровень ${levelNum} пройден`, style: winPopupTextStyle(36) }));
+        this.message = this.root.addChild(new Text({ text: `Уровень ${levelNum} пройден`, style: defaultTextStyle(36) }));
         this.message.anchor.set(0.5);
         this.message.position.set(0, 260);
-        this.motivatedMessage = this.root.addChild(new Text({ text: "Изумительно!", style: winPopupTextStyle(52) }));
+        this.motivatedMessage = this.root.addChild(new Text({ text: "Изумительно!", style: defaultTextStyle(52) }));
         this.motivatedMessage.anchor.set(0.5);
         this.motivatedMessage.position.set(0, 360);
         this.button = this.root.addChild(new Sprite({ texture: assets.buttonGreen, anchor: 0.5 }));
         this.button.eventMode = "static";
         this.button.position.set(0, 780);
-        this.buttonText = this.button.addChild(new Text({ text: `Уровень ${++levelNum}`, style: winPopupTextStyle(48) }));
+        this.buttonText = this.button.addChild(new Text({ text: `Уровень ${++levelNum}`, style: defaultTextStyle(48) }));
         this.buttonText.anchor.set(0.5);
         this.button.on("pointerdown", this.handleButtonClick, this);
     }
@@ -33,14 +34,6 @@ export class WinPopup extends Container {
 
     destroy(options?: DestroyOptions): void {
         super.destroy(options);
-        this.button.removeAllListeners();
+        this.button.off("pointerdown", this.handleButtonClick, this);
     }
 }
-
-const winPopupTextStyle = (fontSize: number) => new TextStyle({
-    fontFamily: 'Vag World Bold',
-    fontWeight: "700",
-    fill: "#FFFFFF",
-    fontSize,
-    align: "center",
-});

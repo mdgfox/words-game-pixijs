@@ -1,8 +1,8 @@
 import { Container, DestroyOptions } from "pixi.js";
-import { GameAssets } from "../../configuration/types";
+import { GameAssets, grayColor } from "../../configuration/types";
 import { FieldCell } from "../common/FieldCell";
 
-export class WordInputVisualization extends Container {
+export class SelectedLettersComponent extends Container {
     private assets: GameAssets;
     private _word: string = "";
     get word() {
@@ -30,7 +30,7 @@ export class WordInputVisualization extends Container {
         this.cells.forEach(cell => cell.destroy());
 
         const newCells = this.word.split("").map((letter, index) => {
-            const cell = new FieldCell(letter, this.assets, 0.58, "black");
+            const cell = new FieldCell(letter, this.assets, 0.58, grayColor);
             cell.position.set(index * 50, 0);
             this.cells.push(cell);
             return cell;
