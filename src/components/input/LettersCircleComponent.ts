@@ -1,8 +1,8 @@
-import { Container, FederatedEvent, Graphics, Point, Sprite } from "pixi.js";
+import { Container, DestroyOptions, FederatedEvent, Graphics, Point, Sprite } from "pixi.js";
 import { GameAssets } from "../../configuration/types";
 import { LetterComponent } from "./LetterComponent";
 
-export class LettersRoulette extends Container {
+export class LettersCircleComponent extends Container {
 
     private assets: GameAssets;
     private root: Container;
@@ -10,6 +10,7 @@ export class LettersRoulette extends Container {
     private selectorLine: Graphics;
     private linesContainer: Container;
     private lettersContainer: Container;
+    private lettersContainerBackground: Sprite;
     private selectionStarted = false;
     private selectedLetters: Array<LetterComponent> = [];
 
@@ -31,11 +32,13 @@ export class LettersRoulette extends Container {
         this.root = this.addChild(new Container());
 
         this.selectorLine = this.root.addChild(new Graphics());
+        this.selectorLine.zIndex = 2;
 
         this.linesContainer = this.root.addChild(new Container());
+        this.linesContainer.zIndex = 2;
 
         this.lettersContainer = this.root.addChild(new Container());
-        const lettersContainerBackground = this.lettersContainer.addChild(new Sprite({ texture: assets.letterPickBackground, anchor: 0.5 }));
+        this.lettersContainerBackground = this.lettersContainer.addChild(new Sprite({ texture: assets.letterPickBackground, anchor: 0.5 }));
 
         this.letters = this.shuffleChars(chars).map((char) => {
             const letter = this.lettersContainer.addChild(new LetterComponent(assets, char));
@@ -46,9 +49,9 @@ export class LettersRoulette extends Container {
             return letter;
         });
 
-        this.initListeners();
+        this.updateLettersPositions();
 
-        this.updateLayout();
+        this.initListeners();
     }
 
     private updateLettersPositions() {
@@ -58,10 +61,6 @@ export class LettersRoulette extends Container {
             const angle = i * angleRad - Math.PI / 2;
             this.letters[i].position.set(Math.cos(angle) * this._radius, Math.sin(angle) * this._radius);
         }
-    }
-
-    private updateLayout() {
-        this.updateLettersPositions();
     }
 
     private initListeners() {
@@ -138,17 +137,11 @@ export class LettersRoulette extends Container {
     }
 
     private drawLine(container: Graphics, from: Point, to: Point): Graphics {
-        container.setStrokeStyle({ width: 100, color: "#638EC4" })
-        container.moveTo(from.x, from.y);
-        container.lineTo(to.x, to.y);
-        return container;
+        return container.circle(from.x, from.y, 15).fill("#638EC4").moveTo(from.x, from.y).lineTo(to.x, to.y).fill("#638EC4").stroke({ width: 15, color: "#638EC4" });
     }
 
     private drawSelectorLine(container: Graphics, from: Point, to: Point): Graphics {
-        return this.drawLine(container, from, to).lineStyle(15, "#638EC4")
-            .beginFill("#638EC4")
-            .circle(to.x, to.y, 15)
-            .endFill();
+        return this.drawLine(container, from, to).circle(to.x, to.y, 15).fill("#638EC4").stroke({ width: 15, color: "#638EC4" });
     }
 
     private shuffleChars(chars: string[]) {
@@ -158,5 +151,12 @@ export class LettersRoulette extends Container {
             [arrCopy[i], arrCopy[j]] = [arrCopy[j], arrCopy[i]];
         }
         return arrCopy;
+    }
+
+    destroy(options?: DestroyOptions): void {
+        super.destroy(options);
+        this.off("pointerup", this.onPointerUp, this);
+        this.off("pointerupoutside", this.onPointerUp, this);
+        this.off("pointermove", this.onPointerMove, this);
     }
 }

@@ -1,10 +1,10 @@
-import { Application, ApplicationOptions, Assets, BrowserAdapter, uid } from "pixi.js";
+import { Application, ApplicationOptions, Assets, BrowserAdapter, DestroyOptions, RendererDestroyOptions, uid } from "pixi.js";
 import { manifest } from "../configuration/assetsManifest";
 import { Title } from "./common/Title";
 import { Field } from "./field/Field";
 import axios from "axios";
 import { GameAssets } from "../configuration/types";
-import { LettersController } from "./input/LettersController";
+import { InputComponent } from "./input/InputComponent";
 import { WinPopup } from "./popups/WinPopup";
 import { v4 as uuidv4 } from 'uuid';
 import { ReloadPopup } from "./popups/ReloadPopup";
@@ -19,7 +19,7 @@ export class Game extends Application {
 
     private titleComponent?: Title;
     private field?: Field;
-    private inputController?: LettersController;
+    private inputController?: InputComponent;
     private winPopup?: WinPopup;
     private reloadPopup?: ReloadPopup;
 
@@ -100,15 +100,19 @@ export class Game extends Application {
         this.updateLayout(scale);
     }
 
-
     async startGame() {
         this.titleComponent = this.stage.addChild(new Title(this._currentLevel));
 
-        this.field = this.stage.addChild(new Field(this.assets, this.getCurrentLevelConfig(), this._currentLevelProgress));
+        const currentLevelConfig = this.getCurrentLevelConfig();
+        this.field = this.stage.addChild(new Field(this.assets, currentLevelConfig, this._currentLevelProgress));
 
-        this.inputController = this.stage.addChild(new LettersController(this.assets, this.getCurrentLevelLetters()));
+        this.inputController = this.stage.addChild(new InputComponent(this.assets, this.getCurrentLevelLetters()));
 
         this.updateLayout(window.innerHeight / Game.HEIGHT);
+
+        if (this.field?.openedLines === currentLevelConfig.length) {
+            this.handleLevelWin();
+        }
     }
 
     updateLayout(scale: number) {
@@ -157,7 +161,7 @@ export class Game extends Application {
     handleWordSelectionComplete(word: string) {
         const currentLevel = this.getCurrentLevelConfig();
         const index = currentLevel.findIndex(levelWord => levelWord == word);
-        if (index !== -1) {
+        if (index !== -1 && !this._currentLevelProgress.includes(index)) {
             this.addCurrentLevelProgress(index);
             this.field?.openLine(index);
         }

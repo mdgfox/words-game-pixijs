@@ -10,3 +10,8 @@ export interface GameAssets {
     reloadPopupBackground: Texture;
     reloadPopupRibbon: Texture;
 }
+
+export type GameFontColor = "#FFFFFF" | "#4D4D4D";
+
+export const whiteColor = "#FFFFFF";
+export const grayColor = "#4D4D4D";

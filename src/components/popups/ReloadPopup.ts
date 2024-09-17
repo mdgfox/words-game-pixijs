@@ -1,6 +1,7 @@
 import { Container, Graphics, Sprite, Text, TextStyle } from "pixi.js";
-import { GameAssets } from "../../configuration/types";
+import { grayColor, GameAssets, whiteColor } from "../../configuration/types";
 import { Game } from "../Game";
+import { defaultTextStyle } from "../common/TextStyles";
 
 export class ReloadPopup extends Container {
     private overlay: Graphics;
@@ -15,7 +16,7 @@ export class ReloadPopup extends Container {
         super({ eventMode: "static" });
 
         const scale = window.innerHeight / Game.HEIGHT;
-        this.overlay = this.addChild(new Graphics().beginFill("#000000").drawRect(-0.5, -0.5, window.innerWidth / scale, window.innerHeight / scale).endFill());
+        this.overlay = this.addChild(new Graphics().rect(-0.5, -0.5, window.innerWidth / scale, window.innerHeight / scale)).fill("#000000");
         this.overlay.position.set(-this.overlay.width / 2, 0);
         this.overlay.alpha = 0.7;
         this.interactive = true;
@@ -40,11 +41,11 @@ export class ReloadPopup extends Container {
         this.button = this.background.addChild(new Sprite({ texture: assets.buttonGreen, anchor: 0.5 }));
         this.button.eventMode = "static";
         this.button.position.set(0, 150);
-        this.buttonText = this.button.addChild(new Text({ text: "Обновить", style: buttonTextStyle }));
+        this.buttonText = this.button.addChild(new Text({ text: "Обновить", style: defaultTextStyle(48) }));
         this.buttonText.anchor.set(0.5);
         this.button.on("pointerdown", this.handleButtonClick, this);
 
-        this.zIndex = 1;
+        this.zIndex = 10;
     }
 
     handleButtonClick() {
@@ -56,7 +57,7 @@ export class ReloadPopup extends Container {
 const ribbonTextStyle = new TextStyle({
     fontFamily: 'Vag World Bold',
     fontWeight: "700",
-    fill: "#FFFFFF",
+    fill: whiteColor,
     fontSize: 40,
     lineHeight: 35,
     align: "center",
@@ -67,18 +68,10 @@ const ribbonTextStyle = new TextStyle({
 const messageTextStyle = new TextStyle({
     fontFamily: 'Vag World Bold',
     fontWeight: "700",
-    fill: "#4D4D4D",
+    fill: grayColor,
     fontSize: 32,
     lineHeight: 38,
     align: "center",
     wordWrap: true,
     wordWrapWidth: 500
-});
-
-const buttonTextStyle = new TextStyle({
-    fontFamily: 'Vag World Bold',
-    fontWeight: "700",
-    fill: "#FFFFFF",
-    fontSize: 48,
-    align: "center",
 });
