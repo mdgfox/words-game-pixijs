@@ -3,23 +3,18 @@ import { GameAssets, whiteColor, GameFontColor } from "../../configuration/types
 import { defaultTextStyle } from "./TextStyles";
 
 export class FieldCell extends Container {
-    private letter: string;
-    private assets: GameAssets;
+    private root: Container;
     private letterTextComponent: Text;
     private background: Sprite;
 
-    constructor(letter: string, assets: GameAssets, scale: number = 1, fontColor: GameFontColor = "#FFFFFF") {
+    constructor(private readonly letter: string, private readonly assets: GameAssets, scale: number = 1, fontColor: GameFontColor = "#FFFFFF") {
         super();
-        this.letter = letter;
-        this.assets = assets;
 
-        this.background = this.addChild(new Sprite(assets.letterCell));
-        this.background.anchor.set(0.5);
-        this.letterTextComponent = new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, fontColor) });
+        this.root = this.addChild(new Container());
+        this.background = this.root.addChild(new Sprite({ texture: assets.letterCell, anchor: 0.5 }));
+        this.letterTextComponent = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, fontColor) }));
         this.letterTextComponent.anchor.set(0.5);
         this.letterTextComponent.visible = fontColor === whiteColor ? false : true;
-
-        this.background.addChild(this.letterTextComponent);
 
         this.scale.set(scale);
     }

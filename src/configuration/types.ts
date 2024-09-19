@@ -9,7 +9,7 @@ export interface GameAssets {
     letterPickBackground: Texture;
     reloadPopupBackground: Texture;
     reloadPopupRibbon: Texture;
-}
+};
 
 export type GameFontColor = "#FFFFFF" | "#4D4D4D";
 

@@ -14,7 +14,10 @@
     "@pixi/ui": "0.10.5",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
+    "eventemitter3": "^5.0.1",
     "pixi.js": "^8.4.0",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.8.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

@@ -1,10 +1,9 @@
 import { Container, DestroyOptions, FederatedEvent, Graphics, Point, Sprite } from "pixi.js";
-import { GameAssets } from "../../configuration/types";
+import { GameAssets } from "../../../configuration/types";
 import { LetterComponent } from "./LetterComponent";
 
 export class LettersCircleComponent extends Container {
 
-    private assets: GameAssets;
     private root: Container;
     private letters: Array<LetterComponent>;
     private selectorLine: Graphics;
@@ -24,10 +23,8 @@ export class LettersCircleComponent extends Container {
         this.updateLettersPositions();
     }
 
-    constructor(assets: GameAssets, chars: string[]) {
+    constructor(private readonly assets: GameAssets, private readonly chars: string[]) {
         super({ eventMode: "static" });
-
-        this.assets = assets;
 
         this.root = this.addChild(new Container());
 
@@ -38,10 +35,10 @@ export class LettersCircleComponent extends Container {
         this.linesContainer.zIndex = 2;
 
         this.lettersContainer = this.root.addChild(new Container());
-        this.lettersContainerBackground = this.lettersContainer.addChild(new Sprite({ texture: assets.letterPickBackground, anchor: 0.5 }));
+        this.lettersContainerBackground = this.lettersContainer.addChild(new Sprite({ texture: this.assets.letterPickBackground, anchor: 0.5 }));
 
-        this.letters = this.shuffleChars(chars).map((char) => {
-            const letter = this.lettersContainer.addChild(new LetterComponent(assets, char));
+        this.letters = this.shuffleChars(this.chars).map((char) => {
+            const letter = this.lettersContainer.addChild(new LetterComponent(this.assets, char));
 
             letter.on("onPointerDown", this.onLetterPointerDown, this);
             letter.on("onPointerOver", this.onPointerOverLetter, this);
@@ -74,7 +71,7 @@ export class LettersCircleComponent extends Container {
             return;
         }
         const word = this.selectedLetters.map((letter) => letter.letter).join("");
-        this.emit("letterRoulette:onSelectionComplete", word);
+        this.emit("lettersCircle:onSelectionComplete", word);
         this.selectionStarted = false;
         this.selectedLetters = [];
         this.letters.forEach(letter => letter.selected = false);
@@ -123,7 +120,7 @@ export class LettersCircleComponent extends Container {
         const lastLetter = this.selectedLetters.pop();
         lastLetter!.selected = false;
         this.linesContainer.removeChildAt(this.linesContainer.children.length - 1);
-        this.emit("letterRoulette:onLetterDeselected", lastLetter);
+        this.emit("lettersCircle:onLetterDeselected", lastLetter);
     }
 
     private setLetterSelected(letter: LetterComponent) {
@@ -133,7 +130,7 @@ export class LettersCircleComponent extends Container {
             this.linesContainer.addChild(this.drawLine(new Graphics(), previousLetter.position, letter.position));
         }
         this.selectedLetters.push(letter);
-        this.emit("letterRoulette:onLetterSelected", letter);
+        this.emit("lettersCircle:onLetterSelected", letter);
     }
 
     private drawLine(container: Graphics, from: Point, to: Point): Graphics {

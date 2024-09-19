@@ -1,6 +1,6 @@
 import { Container, DestroyOptions } from "pixi.js";
-import { GameAssets, grayColor } from "../../configuration/types";
-import { FieldCell } from "../common/FieldCell";
+import { GameAssets, grayColor } from "../../../configuration/types";
+import { FieldCell } from "../FieldCell";
 
 export class SelectedLettersComponent extends Container {
     private assets: GameAssets;
@@ -14,9 +14,7 @@ export class SelectedLettersComponent extends Container {
     }
     private root: Container;
     private cells: Array<FieldCell> = [];
-    get cellWidth() {
-        return 42; // todo check access bug this.cells.length > 0 ? this.cells[0].width : 0;
-    }
+
     constructor(assets: GameAssets) {
         super();
 
@@ -27,7 +25,7 @@ export class SelectedLettersComponent extends Container {
     }
 
     updateLayout() {
-        this.cells.forEach(cell => cell.destroy());
+        this.root.removeChildren();
 
         const newCells = this.word.split("").map((letter, index) => {
             const cell = new FieldCell(letter, this.assets, 0.58, grayColor);
@@ -37,10 +35,11 @@ export class SelectedLettersComponent extends Container {
         });
 
         if (newCells.length > 0) {
-            this.root.addChild(...newCells);
+            const firstChild = this.root.addChild(...newCells);
+            const newPivotX = this.root.width / 2 - firstChild.width / 2;
+            this.root.pivot.set(newPivotX, 0);
         }
-        const newPivotX = this.root.width / 2 - this.cellWidth / 2;
-        this.root.pivot.set(newPivotX, 0);
+
     }
 
     removeLastLetter() {
@@ -51,6 +50,6 @@ export class SelectedLettersComponent extends Container {
 
     destroy(options?: DestroyOptions): void {
         super.destroy(options);
-        this.removeListener("word:updated", this.updateLayout);
+        this.removeListener("word:updated", this.updateLayout, this);
     }
 }
