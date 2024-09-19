@@ -1,5 +1,5 @@
+import "reflect-metadata";
 import { Game } from './components/Game';
-
 
 window.onload = async (): Promise<void> => {
     const game = new Game();

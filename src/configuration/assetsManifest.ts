@@ -3,7 +3,7 @@ import { AssetsManifest } from "pixi.js";
 export const manifest: AssetsManifest = {
     bundles: [
         {
-            name: "game",
+            name: "assets",
             assets: [
                 {
                     alias: "letterCell",
@@ -39,5 +39,14 @@ export const manifest: AssetsManifest = {
                 }
             ]
         },
+        {
+            name: "fonts",
+            assets: [
+                {
+                    alias: "PressStart",
+                    src: "./public/fonts/Rubik-SemiBold.ttf"
+                }
+            ]
+        }
     ]
 };

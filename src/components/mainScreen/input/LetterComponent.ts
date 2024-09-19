@@ -1,6 +1,6 @@
 import { Container, DestroyOptions, Sprite, Text, isMobile } from "pixi.js";
-import { grayColor, GameAssets, whiteColor } from "../../configuration/types";
-import { defaultTextStyle } from "../common/TextStyles";
+import { grayColor, GameAssets, whiteColor } from "../../../configuration/types";
+import { defaultTextStyle } from "../TextStyles";
 
 export class LetterComponent extends Container {
     private _letter: string;
