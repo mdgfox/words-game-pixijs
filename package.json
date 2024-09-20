@@ -1,9 +1,9 @@
 {
-  "name": "wordsgame",
+  "name": "words-game",
   "version": "0.0.1",
   "author": "mdgfox",
   "license": "MIT",
-  "repository": "mdgfox/WordsGame",
+  "repository": "mdgfox/words-game",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "watch": "webpack --config webpack/webpack.config.dev.js --watch",
