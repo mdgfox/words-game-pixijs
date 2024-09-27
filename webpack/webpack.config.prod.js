@@ -20,11 +20,8 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: "public", to: "public" },
-            ],
-            patterns: [
-                { from: "favicon.ico", to: "favicon.ico" },
-            ],
+                { from: "public", to: "public" }
+            ]
         }),
         new HTMLWebpackPlugin({
             template: 'src/index.html',
