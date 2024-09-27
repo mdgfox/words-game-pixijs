@@ -16,10 +16,10 @@ export class WinPopup extends BasePopup {
 
         this.root = this.addChild(new Container({ eventMode: "static" }));
 
-        this.message = this.root.addChild(new Text({ text: `Уровень ${gameModel.currentLevel} пройден`, style: defaultTextStyle(36) }));
+        this.message = this.root.addChild(new Text({ text: `Уровень ${gameModel.currentLevel} пройден`, style: defaultTextStyle(60) }));
         this.message.anchor.set(0.5);
         this.message.position.set(0, 260);
-        this.motivatedMessage = this.root.addChild(new Text({ text: "Изумительно!", style: defaultTextStyle(52) }));
+        this.motivatedMessage = this.root.addChild(new Text({ text: "Изумительно!", style: defaultTextStyle(72) }));
         this.motivatedMessage.anchor.set(0.5);
         this.motivatedMessage.position.set(0, 360);
 
