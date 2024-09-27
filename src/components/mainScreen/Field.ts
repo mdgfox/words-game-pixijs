@@ -10,7 +10,7 @@ export class Field extends Container {
     private resizeHandler: () => void;
 
     constructor(private readonly assets: GameAssets, private readonly gameModel: GameModel) {
-        super({ eventMode: "static" });
+        super();
         this.currentLevel = this.gameModel.currentLevelConfig;
 
         this.lines = this.currentLevel.map((word, index) => {
@@ -46,7 +46,7 @@ export class Field extends Container {
 
     handleResize() {
         const scale = window.innerHeight / Game.HEIGHT;
-        this.position.set(window.innerWidth / scale / 2 + this.width / 2, 170);
+        this.position.set(window.innerWidth / scale / 2 + this.width / 2, 200);
         this.pivot.set(this.width / 2, 0);
     }
 

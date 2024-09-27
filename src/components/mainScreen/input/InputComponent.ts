@@ -49,7 +49,7 @@ export class InputComponent extends Container {
 
     handleResize() {
         const scale = window.innerHeight / Game.HEIGHT;
-        this.position.set(window.innerWidth / scale / 2, 700);
+        this.position.set(window.innerWidth / scale / 2, 750);
     }
 
     destroy(options?: DestroyOptions): void {
