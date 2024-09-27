@@ -47,12 +47,12 @@ export class LetterComponent extends Container {
 
     private setSelected() {
         this.background.texture = this.assets.letterPickPink;
-        this.textField.style = defaultTextStyle(64, whiteColor);
+        this.textField.style = defaultTextStyle(60, whiteColor);
     }
 
     private setDeselected() {
         this.background.texture = this.assets.letterPick;
-        this.textField.style = defaultTextStyle(64, grayColor);
+        this.textField.style = defaultTextStyle(60, grayColor);
     }
 
     destroy(options?: DestroyOptions): void {
