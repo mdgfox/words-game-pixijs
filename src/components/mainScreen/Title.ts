@@ -9,7 +9,7 @@ export class Title extends Container {
     constructor(currentLevel: number) {
         super();
         const text = `Уровень ${currentLevel}`;
-        this.titleText = this.addChild(new Text({ text, style: defaultTextStyle() }));
+        this.titleText = this.addChild(new Text({ text, style: defaultTextStyle(72) }));
         this.titleText.anchor.set(0.5, 0);
 
         this.resizeHandler = this.handleResize.bind(this);
@@ -20,7 +20,7 @@ export class Title extends Container {
 
     handleResize() {
         const scale = window.innerHeight / Game.HEIGHT;
-        this.position.set(window.innerWidth / scale / 2, 20);
+        this.position.set(window.innerWidth / scale / 2, 50);
     }
 
     destroy(options?: DestroyOptions): void {

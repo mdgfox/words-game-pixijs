@@ -12,7 +12,7 @@ export class FieldCell extends Container {
 
         this.root = this.addChild(new Container());
         this.background = this.root.addChild(new Sprite({ texture: assets.letterCell, anchor: 0.5 }));
-        this.letterTextComponent = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, fontColor) }));
+        this.letterTextComponent = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(60, fontColor) }));
         this.letterTextComponent.anchor.set(0.5);
         this.letterTextComponent.visible = fontColor === whiteColor ? false : true;
 

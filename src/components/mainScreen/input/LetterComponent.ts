@@ -33,7 +33,7 @@ export class LetterComponent extends Container {
         this.background = this.root.addChild(new Sprite({ texture: assets.letterPick, anchor: 0.5 }));
         this.background.eventMode = "static";
 
-        this.textField = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(64, grayColor) }));
+        this.textField = this.background.addChild(new Text({ text: letter.toLocaleUpperCase(), style: defaultTextStyle(60, grayColor) }));
         this.textField.anchor.set(0.5);
 
         this.on("pointerover", () => this.emit("onPointerOver", this), this);
