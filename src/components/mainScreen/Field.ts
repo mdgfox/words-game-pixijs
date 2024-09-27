@@ -45,7 +45,7 @@ export class Field extends Container {
     }
 
     handleResize() {
-        const scale = window.innerHeight / Game.HEIGHT;
+        const scale = Math.min(window.innerWidth / Game.WIDTH, window.innerHeight / Game.HEIGHT);
         this.position.set(window.innerWidth / scale / 2 + this.width / 2, 200);
         this.pivot.set(this.width / 2, 0);
     }

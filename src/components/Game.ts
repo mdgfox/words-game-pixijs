@@ -59,7 +59,7 @@ export class Game extends Application {
     }
 
     handleResize() {
-        const scale = window.innerHeight / Game.HEIGHT;
+        const scale = Math.min(window.innerWidth / Game.WIDTH, window.innerHeight / Game.HEIGHT);
         this.stage.scale.set(scale);
     }
 

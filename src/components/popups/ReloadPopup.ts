@@ -54,7 +54,7 @@ export class ReloadPopup extends BasePopup {
     }
 
     handleResize(): void {
-        const scale = window.innerHeight / Game.HEIGHT;
+        const scale = Math.min(window.innerWidth / Game.WIDTH, window.innerHeight / Game.HEIGHT);
         this.overlay.width = window.innerWidth / scale;
         this.overlay.height = window.innerHeight / scale;
         this.background.position.set(this.overlay.width / 2, this.overlay.height / 2);

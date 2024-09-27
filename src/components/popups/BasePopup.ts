@@ -12,7 +12,7 @@ export class BasePopup extends Container {
     }
 
     handleResize() {
-        const scale = window.innerHeight / Game.HEIGHT;
+        const scale = Math.min(window.innerWidth / Game.WIDTH, window.innerHeight / Game.HEIGHT);
         this.position.set(window.innerWidth / scale / 2, 0);
     }
 
