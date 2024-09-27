@@ -23,10 +23,13 @@ module.exports = {
             patterns: [
                 { from: "public", to: "public" },
             ],
+            patterns: [
+                { from: "favicon.ico", to: "favicon.ico" },
+            ],
         }),
         new HTMLWebpackPlugin({
             template: 'src/index.html',
-            title: 'Game'
+            title: 'Words Game'
         }),
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer']

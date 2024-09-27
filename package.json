@@ -6,7 +6,7 @@
   "repository": "mdgfox/words-game",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "watch": "webpack --config webpack/webpack.config.dev.js --watch",
+    "start": "webpack --config webpack/webpack.config.dev.js --watch",
     "build-game:dev": "webpack --config webpack/webpack.config.dev.js",
     "build-game:prod": "webpack --config webpack/webpack.config.prod.js"
   },
